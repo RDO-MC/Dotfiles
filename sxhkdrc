@@ -1,0 +1,182 @@
+#  ███████╗██╗  ██╗██╗  ██╗██╗  ██╗██████╗ ██████╗  ██████╗
+#  ██╔════╝╚██╗██╔╝██║  ██║██║ ██╔╝██╔══██╗██╔══██╗██╔════╝
+#  ███████╗ ╚███╔╝ ███████║█████╔╝ ██║  ██║██████╔╝██║     
+#  ╚════██║ ██╔██╗ ██╔══██║██╔═██╗ ██║  ██║██╔══██╗██║     
+#  ███████║██╔╝ ██╗██║  ██║██║  ██╗██████╔╝██║  ██║╚██████╗
+#  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝╚═════╝ ╚═╝  ╚═╝ ╚═════╝
+#	
+#
+
+# Show help
+F1
+	OpenApps --KeyHelp
+
+#|||----- Applications -----|||#
+
+# Open Terminal (alacritty)
+super + Return
+	kitty
+#close the focused windows
+super + w 
+	bspc node -c 
+
+# Application menu
+super + @space
+	OpenApps --menu
+
+#####
+
+# Apps (browser, editor, filemanager)
+super + b
+	firefox
+# Terminal apps (ranger, nvim, ncmpcpp)
+super + n 
+	OpenApps --nvim
+
+# Pavucontrol
+shift +  p
+	OpenApps --soundcontrol
+
+
+# Screenshot
+super + l
+    scrot '/home/acdc/imagenes/screenshot_%Y-%m-%d_%H-%M-%S.png'
+
+#|||----- System Keybindings -----|||#
+
+
+# jgmenu
+~button3
+  xqp 0 $(xdo id -N Bspwm -n root) && jgmenu --csv-file=~/.config/bspwm/src/jgmenu/menu.txt --config-file=~/.config/bspwm/jgmenurc
+
+# Power off, Reboot, Log out, Lockscreen, kill an app
+ctrl + super + alt + {p,r,q,l,k}
+	{systemctl poweroff, systemctl reboot,bspc quit,physlock -d,xkill}
+
+
+
+# Change transparency on focused window
+ctrl + alt + {plus,minus,t}
+	picom-trans {-c -o +3,-c -o -1,-c -d}
+
+# Network Manager
+super + a
+	OpenApps --netmanager
+
+
+# Screenshot
+super + alt + s
+	OpenApps --screenshot
+
+# Bluetooth
+super + alt + b
+	OpenApps --bluetooth
+
+# PowerMenu
+super + alt + p
+	OpenApps --powermenu
+
+# Manage brightness
+XF86MonBrightness{Up,Down}
+    sh Brightness {up,down}
+
+# Volume control
+XF86Audio{RaiseVolume,LowerVolume,Mute}
+	Volume{ --inc, --dec, --toggle}
+
+# Music Control
+XF86Audio{Next,Prev,Play,Stop}
+	MediaControl {--next,--previous,--toggle,--stop}
+
+
+#|||----- Bspwm hotkeys -----|||#
+
+# Reload BSPWM
+super + i
+	bspc wm -r
+
+	
+# Reload Keybindings
+super + Escape
+	pkill -USR1 -x sxhkd; dunstify -u low -i ~/.config/bspwm/assets/reload.svg 'sxhkd' 'The configuration file has been reloaded successfully!'
+
+#####
+
+# alternate between the tiled and monocle layout
+super + m
+	bspc desktop -l next
+
+# set the window state
+super + {t,shift + t,s,f}
+	bspc node -t {tiled,pseudo_tiled,floating,fullscreen}
+
+# set the node flags
+ctrl + alt {m,x,s,p}
+	bspc node -g {marked,locked,sticky,private}
+
+# Hide/Unhide Window
+ctrl + alt + h
+	BspHideNode
+
+#####
+super + r
+	bspc node @/ --rotate {90,-90}
+
+# Open a new workspace (desktop) to the right
+super + Right
+	bspc monitor -a next; bspc desktop -f next
+
+# Open a new workspace (desktop) to the left
+super + Left
+	bspc monitor -a prev; bspc desktop -f prev
+
+# Mover ventanas flotantes con el mouse
+# Mover ventanas flotantes con el botón izquierdo del ratón
+
+# Change focus of the Node or Swap Nodes
+shift + super {_,ctrl + }{Left,Down,Up,Right}
+	bspc node -{f,s} {west,south,north,east}
+
+# Switch workspace
+super + {Left,Right}
+	bspc desktop -f {prev,next}.local
+
+# focus or send to the given desktop
+super + {_,alt + }{1-9,0}
+	bspc {desktop -f,node -d} '^{1-9,10}'
+
+# Send focused Node to workspace directionally
+super + alt + {Left,Right}
+	bspc node -d {prev,next} '--follow'
+
+# focus the last node/desktop
+super + {comma,Tab}
+	bspc {node,desktop} -f last
+
+#####
+
+# preselect the direction
+super + {h,j,k,l}
+	bspc node -p {west,south,north,east}
+
+# cancel the preselection for the focused node
+super + alt + space
+	bspc node -p cancel
+
+#####
+	
+# expand a window
+ctrl + alt {Left,Down,Up,Right}
+	bspc node -z {left -10 0,bottom 0 10,top 0 -10,right 10 0}
+
+# contract a window
+ctrl + shift + alt + {Left,Down,Up,Right}
+	bspc node -z {right -10 0,top 0 10,bottom 0 -10,left 10 0}
+
+# move a floating window
+alt + ctrl {Left,Down,Up,Right}
+	bspc node -v {-10 0,0 10,0 -10,10 0}
+# rotate desktop
+
+
+
